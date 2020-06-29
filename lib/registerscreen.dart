@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:unique/loginscreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:toast/toast.dart';
@@ -17,8 +18,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController _nameRegisterController = new TextEditingController();
   TextEditingController _emailRegisterController = new TextEditingController();
   TextEditingController _phoneRegisterController = new TextEditingController();
-  TextEditingController _passwordRegisterController =
-      new TextEditingController();
+  TextEditingController _passwordRegisterController = new TextEditingController();
+  var _formKey = new GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +27,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: new ThemeData(
-        primarySwatch: Colors.yellow,
+        primarySwatch: Colors.blue,
       ),
-      title: 'Cool Sun Application',
+      title: 'Unique Application',
       home: Scaffold(
           resizeToAvoidBottomPadding: false,
           body: Stack(
             children: <Widget>[
               firstHalf(context),
               secondHalf(context),
-              thirdHalf(context),
               titleName(),
             ],
           )),
@@ -55,15 +55,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget secondHalf(BuildContext context) {
     return Container(
-      height: 550,
-      margin: EdgeInsets.only(top: screenHeight / 6.5),
+      //height: 600,
+      margin: EdgeInsets.only(top: screenHeight / 7),
       padding: EdgeInsets.only(left: 10, right: 10),
+      child: new Form(
+          key: _formKey,
+          autovalidate: true,
       child: Column(
         children: <Widget>[
           Card(
             elevation: 10,
             child: Container(
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 15),
+              padding: EdgeInsets.all(20),
               child: Column(
                 children: <Widget>[
                   Align(
@@ -71,7 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Text(
                       "User Register",
                       style: TextStyle(
-                        color: Colors.yellowAccent[700],
+                        color: Colors.blue[700],
                         fontSize: 26,
                         fontWeight: FontWeight.w900,
                         fontFamily: "Roboto",
@@ -79,15 +82,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
-                  TextField(
+                  TextFormField(
                       controller: _nameRegisterController,
                       keyboardType: TextInputType.text,
+                      inputFormatters: [
+                          new LengthLimitingTextInputFormatter(30)
+                        ],
+                        validator: (val) =>
+                            val.isEmpty ? 'Username is required' : null,
                       textAlign: TextAlign.left,
                       style: TextStyle(
                           fontSize: 16.0,
-                          color: Colors.yellow[900],
+                          color: Colors.blue,
                           fontWeight: FontWeight.w800,
                           fontFamily: "Roboto"),
                       decoration: InputDecoration(
@@ -105,13 +113,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SizedBox(
                     height: 10,
                   ),
-                  TextField(
+                  TextFormField(
                       controller: _emailRegisterController,
-                      keyboardType: TextInputType.text,
                       textAlign: TextAlign.left,
+                      keyboardType: TextInputType.emailAddress,
+                          validator: (value) => _isEmailValid(value)
+                              ? null
+                              : 'Please enter a valid email address',
                       style: TextStyle(
                           fontSize: 16.0,
-                          color: Colors.yellow[900],
+                          color: Colors.blue,
                           fontWeight: FontWeight.w800,
                           fontFamily: "Roboto"),
                       decoration: InputDecoration(
@@ -129,13 +140,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SizedBox(
                     height: 10,
                   ),
-                  TextField(
+                  TextFormField(
                       controller: _phoneRegisterController,
                       keyboardType: TextInputType.text,
+                      inputFormatters: [
+                          new LengthLimitingTextInputFormatter(30)
+                        ],
+                        validator: (val) =>
+                            val.isEmpty ? 'Phone is required' : null,
                       textAlign: TextAlign.left,
                       style: TextStyle(
                           fontSize: 16.0,
-                          color: Colors.yellow[900],
+                          color: Colors.blue,
                           fontWeight: FontWeight.w800,
                           fontFamily: "Roboto"),
                       decoration: InputDecoration(
@@ -153,13 +169,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SizedBox(
                     height: 10,
                   ),
-                  TextField(
+                  TextFormField(
                     controller: _passwordRegisterController,
                     keyboardType: TextInputType.text,
+                    inputFormatters: [
+                          new LengthLimitingTextInputFormatter(30)
+                        ],
+                        validator: (val) =>
+                            val.isEmpty ? 'Password is required' : null,
                     textAlign: TextAlign.left,
                     style: TextStyle(
                         fontSize: 16.0,
-                        color: Colors.yellow[900],
+                        color: Colors.blue,
                         fontWeight: FontWeight.w800,
                         fontFamily: "Roboto"),
                     decoration: InputDecoration(
@@ -196,51 +217,53 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ],
                   ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    child: MaterialButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0)),
+                      minWidth: 125,
+                      height: 50,
+                      child: Text(
+                        'Register',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      color: Colors.blue[900],
+                      textColor: Colors.white,
+                      elevation: 10,
+                      onPressed: _onRegister,
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
           SizedBox(
-            height: 40,
+            height: 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text("Already register? ",
-                  style:
-                      TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600)),
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white)),
               GestureDetector(
                 onTap: _loginScreen,
                 child: Text(
                   "Login",
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w900),
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.black),
                 ),
               ),
             ],
           )
         ],
       ),
-    );
-  }
-
-  Widget thirdHalf(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(145, 435, 50, 150),
-      child: MaterialButton(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-        minWidth: 125,
-        height: 50,
-        child: Text(
-          'Register',
-          style: TextStyle(fontSize: 18),
-        ),
-        color: Colors.red[900],
-        textColor: Colors.white,
-        elevation: 10,
-        onPressed: _onRegister,
-      ),
-    );
+    ));
   }
 
   Widget titleName() {
@@ -253,13 +276,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Icon(
             Icons.shop,
             size: 40,
-            color: Colors.indigo[900],
+            color: Colors.blueGrey[100],
           ),
           Text(
             " Unique",
             style: TextStyle(
                 fontSize: 36,
-                color: Colors.indigo[900],
+                color: Colors.blueGrey[100],
                 fontWeight: FontWeight.w900),
           )
         ],
@@ -345,7 +368,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               fontSize: 12.0,
                             ),
                             text:
-                                "This End-User License Agreement is a legal agreement between you and yjjmappflutter This EULA agreement governs your acquisition and use of our Unique software (Software) directly from yjjmappflutter or indirectly through a yjjmappflutter authorized reseller or distributor (a Reseller).Please read this EULA agreement carefully before completing the installation process and using the Unique software. It provides a license to use the Unique software and contains warranty information and liability disclaimers. If you register for a free trial of the Cool Sun software, this EULA agreement will also govern that trial. By clicking accept or installing and/or using the Unique software, you are confirming your acceptance of the Software and agreeing to become bound by the terms of this EULA agreement. If you are entering into this EULA agreement on behalf of a company or other legal entity, you represent that you have the authority to bind such entity and its affiliates to these terms and conditions. If you do not have such authority or if you do not agree with the terms and conditions of this EULA agreement, do not install or use the Software, and you must not accept this EULA agreement.This EULA agreement shall apply only to the Software supplied by yjjmappflutter herewith regardless of whether other software is referred to or described herein. The terms also apply to any yjjmappflutter updates, supplements, Internet-based services, and support services for the Software, unless other terms accompany those items on delivery. If so, those terms apply. This EULA was created by EULA Template for Unique. yjjmappflutter shall at all times retain ownership of the Software as originally downloaded by you and all subsequent downloads of the Software by you. The Software (and the copyright, and other intellectual property rights of whatever nature in the Software, including any modifications made thereto) are and shall remain the property of yjjmappflutter. yjjmappflutter reserves the right to grant licences to use the Software to third parties"
+                                "This End-User License Agreement is a legal agreement between you and yjjmappflutter This EULA agreement governs your acquisition and use of our Unique software (Software) directly from yjjmappflutter or indirectly through a yjjmappflutter authorized reseller or distributor (a Reseller).Please read this EULA agreement carefully before completing the installation process and using the Unique software. It provides a license to use the Unique software and contains warranty information and liability disclaimers. If you register for a free trial of the Unique software, this EULA agreement will also govern that trial. By clicking accept or installing and/or using the Unique software, you are confirming your acceptance of the Software and agreeing to become bound by the terms of this EULA agreement. If you are entering into this EULA agreement on behalf of a company or other legal entity, you represent that you have the authority to bind such entity and its affiliates to these terms and conditions. If you do not have such authority or if you do not agree with the terms and conditions of this EULA agreement, do not install or use the Software, and you must not accept this EULA agreement.This EULA agreement shall apply only to the Software supplied by yjjmappflutter herewith regardless of whether other software is referred to or described herein. The terms also apply to any yjjmappflutter updates, supplements, Internet-based services, and support services for the Software, unless other terms accompany those items on delivery. If so, those terms apply. This EULA was created by EULA Template for Unique. yjjmappflutter shall at all times retain ownership of the Software as originally downloaded by you and all subsequent downloads of the Software by you. The Software (and the copyright, and other intellectual property rights of whatever nature in the Software, including any modifications made thereto) are and shall remain the property of yjjmappflutter. yjjmappflutter reserves the right to grant licences to use the Software to third parties"
                             //children: getSpan(),
                             )),
                   ),

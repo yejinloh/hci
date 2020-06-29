@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:unique/user.dart';
-import 'package:unique/mainscreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:toast/toast.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -33,9 +32,6 @@ class _CartScreenState extends State<CartScreen> {
   String titlecenter = "Loading your cart...";
   String curaddress;
   String server = "https://yjjmappflutter.com/Unique";
-  bool _selfPickup = true;
-  bool _storeCredit = false;
-  bool _homeDelivery = false;
   double _totalprice = 0.0;
   Position _currentPosition;
   Completer<GoogleMapController> _controller = Completer();
@@ -64,367 +60,257 @@ class _CartScreenState extends State<CartScreen> {
     return WillPopScope(
         onWillPop: _onBackPressed,
         child: Scaffold(
-            backgroundColor: Colors.yellow[100],
-            resizeToAvoidBottomPadding: false,
-            appBar: AppBar(
-              title: Text('My Cart'),
-              backgroundColor: Colors.yellow[800],
-            ),
-            body: Container(
-                child: Column(
-              children: <Widget>[
-                Text(
-                  "Content of my Cart",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
-                ),
-                cartData == null
-                    ? Flexible(
-                        child: Container(
-                            child: Center(
-                                child: Text(
-                        titlecenter,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold),
-                      ))))
-                    : Expanded(
-                        child: ListView.builder(
-                            itemCount:
-                                cartData == null ? 1 : cartData.length + 2,
-                            itemBuilder: (context, index) {
-                              if (index == cartData.length) {
-                                return Container(
-                                    height: screenHeight / 2.4,
-                                    width: screenWidth / 2.5,
-                                    child: InkWell(
-                                      //onLongPress: () => {print("Delete")},
-                                      child: Card(
-                                        //color: Colors.yellow,
-                                        elevation: 5,
-                                        child: Column(
-                                          children: <Widget>[
-                                            SizedBox(
-                                              height: 10,
+          backgroundColor: Colors.grey[200],
+          resizeToAvoidBottomPadding: false,
+          appBar: AppBar(
+            title: Text('My Cart'),
+            backgroundColor: Colors.blue[800],
+          ),
+          body: Container(
+              child: Column(
+            children: <Widget>[
+              Text(
+                "Content of my Cart",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
+              ),
+              cartData == null
+                  ? Flexible(
+                      child: Container(
+                          child: Center(
+                              child: Text(
+                      titlecenter,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
+                    ))))
+                  : Expanded(
+                      child: ListView.builder(
+                          itemCount: cartData == null ? 1 : cartData.length + 2,
+                          itemBuilder: (context, index) {
+                            if (index == cartData.length) {
+                              return Container(
+                                  height: screenHeight / 3.5,
+                                  width: screenWidth / 2.5,
+                                  child: InkWell(
+                                    //onLongPress: () => {print("Delete")},
+                                    child: Card(
+                                      //color: Colors.yellow,
+                                      elevation: 5,
+                                      child: Column(
+                                        children: <Widget>[
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text("Delivery Option",
+                                              style: TextStyle(
+                                                  fontSize: 18.0,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black)),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            "Home Delivery",
+                                            style: TextStyle(
+                                              color: Colors.black,
                                             ),
-                                            Text("Delivery Option",
-                                                style: TextStyle(
-                                                    fontSize: 18.0,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black)),
-                                            Expanded(
-                                                child: Row(
-                                              children: <Widget>[
-                                                Container(
-                                                  //color: Colors.red,
-                                                  width: screenWidth / 2,
-                                                  // height: screenHeight / 3,
-                                                  child: Column(
-                                                    children: <Widget>[
-                                                      Row(
-                                                        children: <Widget>[
-                                                          Checkbox(
-                                                            value: _selfPickup,
-                                                            onChanged:
-                                                                (bool value) {
-                                                              _onSelfPickUp(
-                                                                  value);
-                                                            },
-                                                          ),
-                                                          Text(
-                                                            "Self Pickup",
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
+                                          ),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+                                          Text("Current Address:",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black)),
+                                          Row(
+                                            children: <Widget>[
+                                              Text("  "),
+                                              Flexible(
+                                                child: Text(
+                                                  curaddress ??
+                                                      "Address not set",
+                                                  maxLines: 3,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    color: Colors.black,
                                                   ),
                                                 ),
-                                                Padding(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            2, 1, 2, 1),
-                                                    child: SizedBox(
-                                                        width: 2,
-                                                        child: Container(
-                                                          // height: screenWidth / 2,
-                                                          color: Colors.grey,
-                                                        ))),
-                                                Expanded(
-                                                    child: Container(
-                                                  width: screenWidth / 2,
-                                                  //height: screenHeight / 3,
-                                                  child: Column(
-                                                    children: <Widget>[
-                                                      Row(
-                                                        children: <Widget>[
-                                                          Checkbox(
-                                                            value:
-                                                                _homeDelivery,
-                                                            onChanged:
-                                                                (bool value) {
-                                                              _onHomeDelivery(
-                                                                  value);
-                                                            },
-                                                          ),
-                                                          Text(
-                                                            "Home Delivery",
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      FlatButton(
-                                                        color: Colors.red,
-                                                        onPressed: () =>
-                                                            {_loadMapDialog()},
-                                                        child: Icon(
-                                                          MdiIcons
-                                                              .locationEnter,
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                      Text("Current Address:",
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              color: Colors
-                                                                  .black)),
-                                                      Row(
-                                                        children: <Widget>[
-                                                          Text("  "),
-                                                          Flexible(
-                                                            child: Text(
-                                                              curaddress ??
-                                                                  "Address not set",
-                                                              maxLines: 3,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )),
-                                              ],
-                                            ))
-                                          ],
-                                        ),
-                                      ),
-                                    ));
-                              }
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
 
-                              if (index == cartData.length + 1) {
-                                return Container(
-                                    //height: screenHeight / 3,
-                                    child: Card(
-                                  elevation: 5,
-                                  child: Column(
-                                    children: <Widget>[
-                                      SizedBox(
-                                        height: 10,
+                                          FlatButton(
+                                            color: Colors.blue[700],
+                                            onPressed: () => {_loadMapDialog()},
+                                            child: Icon(
+                                              MdiIcons.locationEnter,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      Text("Payment",
-                                          style: TextStyle(
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black)),
-                                      SizedBox(height: 10),
-                                      Container(
-                                          padding:
-                                              EdgeInsets.fromLTRB(50, 0, 50, 0),
-                                          //color: Colors.red,
-                                          child: Table(
-                                              defaultColumnWidth:
-                                                  FlexColumnWidth(1.0),
-                                              columnWidths: {
-                                                0: FlexColumnWidth(7),
-                                                1: FlexColumnWidth(3),
-                                              },
-                                              //border: TableBorder.all(color: Colors.black),
-                                              children: [
-                                                TableRow(children: [
-                                                  TableCell(
-                                                    child: Container(
-                                                        alignment: Alignment
-                                                            .centerLeft,
-                                                        height: 20,
-                                                        child: Text(
-                                                            "Total Item Price ",
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: Colors
-                                                                    .black))),
-                                                  ),
-                                                  TableCell(
-                                                    child: Container(
+                                    ),
+                                  ));
+                            }
+
+                            if (index == cartData.length + 1) {
+                              return Container(
+                                  //height: screenHeight / 3,
+                                  child: Card(
+                                elevation: 5,
+                                child: Column(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text("Payment",
+                                        style: TextStyle(
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black)),
+                                    SizedBox(height: 10),
+                                    Container(
+                                        padding:
+                                            EdgeInsets.fromLTRB(50, 0, 50, 0),
+                                        //color: Colors.red,
+                                        child: Table(
+                                            defaultColumnWidth:
+                                                FlexColumnWidth(1.0),
+                                            columnWidths: {
+                                              0: FlexColumnWidth(7),
+                                              1: FlexColumnWidth(3),
+                                            },
+                                            //border: TableBorder.all(color: Colors.black),
+                                            children: [
+                                              TableRow(children: [
+                                                TableCell(
+                                                  child: Container(
                                                       alignment:
                                                           Alignment.centerLeft,
                                                       height: 20,
                                                       child: Text(
-                                                          "RM" +
-                                                                  _totalprice
-                                                                      .toStringAsFixed(
-                                                                          2) ??
-                                                              "0.0",
+                                                          "Total Item Price ",
                                                           style: TextStyle(
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold,
-                                                              fontSize: 14,
                                                               color: Colors
-                                                                  .black)),
-                                                    ),
+                                                                  .black))),
+                                                ),
+                                                TableCell(
+                                                  child: Container(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    height: 20,
+                                                    child: Text(
+                                                        "RM" +
+                                                                _totalprice
+                                                                    .toStringAsFixed(
+                                                                        2) ??
+                                                            "0.0",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 14,
+                                                            color:
+                                                                Colors.black)),
                                                   ),
-                                                ]),
-                                                TableRow(children: [
-                                                  TableCell(
-                                                    child: Container(
-                                                        alignment: Alignment
-                                                            .centerLeft,
-                                                        height: 20,
-                                                        child: Text(
-                                                            "Delivery Charge ",
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: Colors
-                                                                    .black))),
-                                                  ),
-                                                  TableCell(
-                                                    child: Container(
+                                                ),
+                                              ]),
+                                              TableRow(children: [
+                                                TableCell(
+                                                  child: Container(
                                                       alignment:
                                                           Alignment.centerLeft,
                                                       height: 20,
                                                       child: Text(
-                                                          "RM" +
-                                                                  deliverycharge
-                                                                      .toStringAsFixed(
-                                                                          2) ??
-                                                              "0.0",
+                                                          "Delivery Charge ",
                                                           style: TextStyle(
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold,
-                                                              fontSize: 14,
                                                               color: Colors
-                                                                  .black)),
-                                                    ),
+                                                                  .black))),
+                                                ),
+                                                TableCell(
+                                                  child: Container(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    height: 20,
+                                                    child: Text(
+                                                        "RM" +
+                                                                deliverycharge
+                                                                    .toStringAsFixed(
+                                                                        2) ??
+                                                            "0.0",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 14,
+                                                            color:
+                                                                Colors.black)),
                                                   ),
-                                                ]),
-                                                TableRow(children: [
-                                                  TableCell(
-                                                    child: Container(
-                                                        alignment: Alignment
-                                                            .centerLeft,
-                                                        height: 20,
-                                                        child: Text(
-                                                            "Store Credit RM" +
-                                                                widget.user
-                                                                    .credit,
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: Colors
-                                                                    .black))),
-                                                  ),
-                                                  TableCell(
-                                                    child: Container(
-                                                      alignment:
-                                                          Alignment.centerLeft,
-                                                      height: 20,
-                                                      child: Checkbox(
-                                                        value: _storeCredit,
-                                                        onChanged:
-                                                            (bool value) {
-                                                          _onStoreCredit(value);
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ]),
-                                                TableRow(children: [
-                                                  TableCell(
-                                                    child: Container(
-                                                        alignment: Alignment
-                                                            .centerLeft,
-                                                        height: 20,
-                                                        child: Text(
-                                                            "Total Amount ",
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: Colors
-                                                                    .black))),
-                                                  ),
-                                                  TableCell(
-                                                    child: Container(
+                                                ),
+                                              ]),
+                                              TableRow(children: [
+                                                TableCell(
+                                                  child: Container(
                                                       alignment:
                                                           Alignment.centerLeft,
                                                       height: 20,
                                                       child: Text(
-                                                          "RM" +
-                                                                  amountpayable
-                                                                      .toStringAsFixed(
-                                                                          2) ??
-                                                              "0.0",
+                                                          "Total Amount ",
                                                           style: TextStyle(
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold,
                                                               color: Colors
-                                                                  .black)),
-                                                    ),
+                                                                  .black))),
+                                                ),
+                                                TableCell(
+                                                  child: Container(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    height: 20,
+                                                    child: Text(
+                                                        "RM" +
+                                                                amountpayable
+                                                                    .toStringAsFixed(
+                                                                        2) ??
+                                                            "0.0",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                Colors.black)),
                                                   ),
-                                                ]),
-                                              ])),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      MaterialButton(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20.0)),
-                                        minWidth: 200,
-                                        height: 40,
-                                        child: Text('Make Payment'),
-                                        color: Colors.red,
-                                        textColor: Colors.black,
-                                        elevation: 10,
-                                        onPressed: makePayment,
-                                      ),
-                                    ],
-                                  ),
-                                ));
-                              }
+                                                ),
+                                              ]),
+                                            ])),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                  ],
+                                ),
+                              ));
+                            }
 
-                              index -= 0;
+                            index -= 0;
 
-                              return Card(
-                                  elevation: 10,
-                                  child: Padding(
-                                      padding: EdgeInsets.all(5),
-                                      child: Row(children: <Widget>[
+                            return Card(
+                                elevation: 10,
+                                child: Padding(
+                                    padding: EdgeInsets.all(5),
+                                    child: Row(
+                                      children: <Widget>[
                                         Column(
                                           children: <Widget>[
                                             Container(
@@ -434,7 +320,7 @@ class _CartScreenState extends State<CartScreen> {
                                                   child: CachedNetworkImage(
                                                 fit: BoxFit.scaleDown,
                                                 imageUrl: server +
-                                                    "/images/${cartData[index]['code']}.jpg",
+                                                    "/productimages/${cartData[index]['code']}.jpg",
                                                 placeholder: (context, url) =>
                                                     new CircularProgressIndicator(),
                                                 errorWidget:
@@ -460,7 +346,7 @@ class _CartScreenState extends State<CartScreen> {
                                                   color: Colors.grey,
                                                 ))),
                                         Container(
-                                            width: screenWidth / 1.45,
+                                            width: screenWidth / 1.8,
                                             child: Row(
                                               //crossAxisAlignment: CrossAxisAlignment.center,
                                               //mainAxisAlignment: MainAxisAlignment.center,
@@ -475,7 +361,7 @@ class _CartScreenState extends State<CartScreen> {
                                                                 FontWeight.bold,
                                                             fontSize: 16,
                                                             color: Colors
-                                                                .yellow[900]),
+                                                                .blue[900]),
                                                         maxLines: 1,
                                                       ),
                                                       Text(
@@ -512,7 +398,7 @@ class _CartScreenState extends State<CartScreen> {
                                                                 child: Icon(
                                                                   MdiIcons.plus,
                                                                   color: Colors
-                                                                      .yellow,
+                                                                      .blue,
                                                                 ),
                                                               ),
                                                               Text(
@@ -535,11 +421,14 @@ class _CartScreenState extends State<CartScreen> {
                                                                   MdiIcons
                                                                       .minus,
                                                                   color: Colors
-                                                                      .yellow,
+                                                                      .blue,
                                                                 ),
                                                               ),
                                                             ],
                                                           )),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
                                                       Row(
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
@@ -556,15 +445,6 @@ class _CartScreenState extends State<CartScreen> {
                                                                           .bold,
                                                                   color: Colors
                                                                       .black)),
-                                                          FlatButton(
-                                                            onPressed: () => {
-                                                              _deleteCart(index)
-                                                            },
-                                                            child: Icon(
-                                                              MdiIcons.delete,
-                                                              color: Colors.red,
-                                                            ),
-                                                          ),
                                                         ],
                                                       ),
                                                     ],
@@ -572,10 +452,64 @@ class _CartScreenState extends State<CartScreen> {
                                                 )
                                               ],
                                             )),
-                                      ])));
-                            })),
-              ],
-            ))));
+                                        Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                5, 1, 10, 1),
+                                            child: SizedBox(
+                                                width: 2,
+                                                child: Container(
+                                                  height: screenWidth / 3.5,
+                                                  color: Colors.grey,
+                                                ))),
+                                        Flexible(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              FlatButton(
+                                                onPressed: () =>
+                                                    {_deleteCart(index)},
+                                                child: Icon(
+                                                  MdiIcons.delete,
+                                                  color: Colors.blue,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    )));
+                          })),
+            ],
+          )),
+          bottomNavigationBar: new Container(
+              color: Colors.blueGrey[200],
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: ListTile(
+                      title: new Text("Total Amount:"),
+                      subtitle: new Text(
+                        "RM" + amountpayable.toStringAsFixed(2) ?? "0.0",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.blue[900]),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                      child: new MaterialButton(
+                    onPressed: makePayment,
+                    child: new Text("Check Out",
+                        style: TextStyle(color: Colors.white)),
+                    color: Colors.blue[900],
+                  ))
+                ],
+              )),
+        ));
   }
 
   Future<bool> _onBackPressed() {
@@ -584,7 +518,7 @@ class _CartScreenState extends State<CartScreen> {
           builder: (context) => new AlertDialog(
             title: new Text('Are you sure?',
                 style: TextStyle(
-                  color: Colors.yellow[900],
+                  color: Colors.blue[900],
                 )),
             content: new Text('Do you want to exit an App?'),
             actions: <Widget>[
@@ -594,7 +528,7 @@ class _CartScreenState extends State<CartScreen> {
                   },
                   child: Text("Exit",
                       style: TextStyle(
-                        color: Colors.yellow,
+                        color: Colors.blue,
                       ))),
               MaterialButton(
                   onPressed: () {
@@ -602,7 +536,7 @@ class _CartScreenState extends State<CartScreen> {
                   },
                   child: Text("Cancel",
                       style: TextStyle(
-                        color: Colors.yellow,
+                        color: Colors.blue,
                       ))),
             ],
           ),
@@ -623,31 +557,33 @@ class _CartScreenState extends State<CartScreen> {
       "email": widget.user.email,
     }).then((res) {
       print(res.body);
-      //pr.dismiss();
+      pr.hide();
       if (res.body == "Cart Empty") {
-        //widget.user.quantity = "0";
-         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => MainScreen(
-                      user: widget.user,
-                    )));
-        
+        setState(() {
+          cartData = null;
+          titlecenter = "Cart Empty";
+        });
       }
       setState(() {
         var extractdata = json.decode(res.body);
         cartData = extractdata["cart"];
         for (int i = 0; i < cartData.length; i++) {
           _totalprice = double.parse(cartData[i]['yourprice']) + _totalprice;
+          if (_totalprice > 100) {
+            deliverycharge = 6.00;
+          } else {
+            deliverycharge = 12.00;
+          }
+          print("Dev Charge:" + deliverycharge.toStringAsFixed(3));
         }
-        amountpayable = _totalprice;
+        amountpayable = deliverycharge + _totalprice;
         print(_totalprice);
       });
     }).catchError((err) {
       print(err);
-      //pr.dismiss();
+      pr.hide();
     });
-    //pr.dismiss();
+    pr.hide();
   }
 
   _updateCart(int index, String op) {
@@ -685,93 +621,6 @@ class _CartScreenState extends State<CartScreen> {
       }
     }).catchError((err) {
       print(err);
-    });
-  }
-
-  _deleteCart(int index) {
-    showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20.0))),
-        title: new Text(
-          'Delete item?',
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-        actions: <Widget>[
-          MaterialButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-                http.post(server + "/php/deleteCart.php", body: {
-                  "email": widget.user.email,
-                  "prodcode": cartData[index]['code'],
-                }).then((res) {
-                  print(res.body);
-
-                  if (res.body == "success") {
-                    _loadCart();
-                  } else {
-                    Toast.show("Failed", context,
-                        duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                  }
-                }).catchError((err) {
-                  print(err);
-                });
-              },
-              child: Text(
-                "Yes",
-                style: TextStyle(
-                  color: Colors.yellow,
-                ),
-              )),
-          MaterialButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: Text(
-                "Cancel",
-                style: TextStyle(
-                  color: Colors.yellow,
-                ),
-              )),
-        ],
-      ),
-    );
-  }
-
-  void _onSelfPickUp(bool newValue) => setState(() {
-        _selfPickup = newValue;
-        if (_selfPickup) {
-          _homeDelivery = false;
-          _updatePayment();
-        } else {
-          //_homeDelivery = true;
-          _updatePayment();
-        }
-      });
-
-  void _onStoreCredit(bool newValue) => setState(() {
-        _storeCredit = newValue;
-        if (_storeCredit) {
-          _updatePayment();
-        } else {
-          _updatePayment();
-        }
-      });
-
-  void _onHomeDelivery(bool newValue) {
-    //_getCurrentLocation();
-    _getLocation();
-    setState(() {
-      _homeDelivery = newValue;
-      if (_homeDelivery) {
-        _updatePayment();
-        _selfPickup = false;
-      } else {
-        _updatePayment();
-      }
     });
   }
 
@@ -860,7 +709,7 @@ class _CartScreenState extends State<CartScreen> {
                 title: Text(
                   "Select New Delivery Location",
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.blue[900],
                   ),
                 ),
                 titlePadding: EdgeInsets.all(5),
@@ -892,7 +741,7 @@ class _CartScreenState extends State<CartScreen> {
                     //minWidth: 200,
                     height: 30,
                     child: Text('Close'),
-                    color: Color.fromRGBO(101, 255, 218, 50),
+                    color: Colors.blue,
                     textColor: Colors.black,
                     elevation: 10,
                     onPressed: () =>
@@ -943,54 +792,7 @@ class _CartScreenState extends State<CartScreen> {
     //_loadMapDialog();
   }
 
-  void _updatePayment() {
-    _totalprice = 0.0;
-    amountpayable = 0.0;
-    setState(() {
-      for (int i = 0; i < cartData.length; i++) {
-        _totalprice = double.parse(cartData[i]['yourprice']) + _totalprice;
-      }
-      print(_selfPickup);
-      if (_selfPickup) {
-        deliverycharge = 0.0;
-      } else {
-        if (_totalprice > 1000) {
-          deliverycharge = 6.00;
-        } else {
-          deliverycharge = 12.00;
-        }
-      }
-      if (_homeDelivery) {
-        if (_totalprice > 1000) {
-          deliverycharge = 6.00;
-        } else {
-          deliverycharge = 12.00;
-        }
-      }
-      if (_storeCredit) {
-        amountpayable =
-            deliverycharge + _totalprice - double.parse(widget.user.credit);
-      } else {
-        amountpayable = deliverycharge + _totalprice;
-      }
-      print("Dev Charge:" + deliverycharge.toStringAsFixed(3));
-      print(_totalprice);
-    });
-  }
-
   Future<void> makePayment() async {
-    if (_selfPickup) {
-      print("PICKUP");
-      Toast.show("Self Pickup", context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-    } else if (_homeDelivery) {
-      print("HOME DELIVERY");
-      Toast.show("Home Delivery", context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-    } else {
-      Toast.show("Please select delivery option", context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-    }
     var now = new DateTime.now();
     var formatter = new DateFormat('ddMMyyyyhhmmss-');
     String orderid = widget.user.email.substring(0, 10) +
@@ -1054,6 +856,59 @@ class _CartScreenState extends State<CartScreen> {
                 "Cancel",
                 style: TextStyle(
                   color: Color.fromRGBO(101, 255, 218, 50),
+                ),
+              )),
+        ],
+      ),
+    );
+  }
+
+  _deleteCart(int index) {
+    showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0))),
+        title: new Text(
+          'Delete item?',
+          style: TextStyle(
+            color: Colors.black,
+          ),
+        ),
+        actions: <Widget>[
+          MaterialButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+                http.post(server + "/php/deleteCart.php", body: {
+                  "email": widget.user.email,
+                  "prodcode": cartData[index]['code'],
+                }).then((res) {
+                  print(res.body);
+
+                  if (res.body == "success") {
+                    _loadCart();
+                  } else {
+                    Toast.show("Failed", context,
+                        duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                  }
+                }).catchError((err) {
+                  print(err);
+                });
+              },
+              child: Text(
+                "Yes",
+                style: TextStyle(
+                  color: Colors.blue,
+                ),
+              )),
+          MaterialButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text(
+                "Cancel",
+                style: TextStyle(
+                  color: Colors.blue,
                 ),
               )),
         ],

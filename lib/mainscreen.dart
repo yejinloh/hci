@@ -29,6 +29,7 @@ class _MainScreenState extends State<MainScreen> {
   String titlecenter = "Loading products...";
   int quantity = 1;
   String cartquantity = "0";
+  String size = "S";
 
   @override
   void initState() {
@@ -43,14 +44,14 @@ class _MainScreenState extends State<MainScreen> {
     screenWidth = MediaQuery.of(context).size.width;
 
     SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: Colors.red));
+        SystemUiOverlayStyle(statusBarColor: Colors.blue));
     return WillPopScope(
         onWillPop: _onBackPressed,
         child: Scaffold(
-          backgroundColor: Colors.yellow[100],
+          backgroundColor: Colors.grey[200],
           appBar: AppBar(
             title: Text('Products List'),
-            backgroundColor: Colors.yellow[800],
+            backgroundColor: Colors.blue[800],
             actions: <Widget>[
               IconButton(
                 color: Colors.white,
@@ -73,195 +74,204 @@ class _MainScreenState extends State<MainScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Visibility(
-        visible: _visible,
-        child: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Flexible(
-                  child: Container(
-                color: Colors.white,
-                height: 30,
-                child: TextField(
-                    autofocus: false,
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                        icon: Icon(Icons.search),
-                        border: OutlineInputBorder())),
-              )),
-              Flexible(
-                  child: MaterialButton(
-                      color: Colors.amber[900],
-                      onPressed: () =>
-                          {_searchItembyName(_searchController.text)},
-                      elevation: 5,
-                      child: Text(
-                        "Search Product",
-                        style: TextStyle(color: Colors.white),
-                      )))
-            ],
-          ),
-        )),
-                Visibility(
-        visible: _visible,
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              Card(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: <Widget>[
-                      Column(
+                    visible: _visible,
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          Container(
-                              width: 40,
-                              child: Column(
+                          Flexible(
+                              child: Container(
+                            color: Colors.white,
+                            height: 30,
+                            child: TextField(
+                                autofocus: false,
+                                controller: _searchController,
+                                decoration: InputDecoration(
+                                    icon: Icon(Icons.search),
+                                    border: OutlineInputBorder())),
+                          )),
+                          Flexible(
+                              child: MaterialButton(
+                                  color: Colors.blue[900],
+                                  onPressed: () => {
+                                        _searchItembyName(
+                                            _searchController.text)
+                                      },
+                                  elevation: 5,
+                                  child: Text(
+                                    "Search Product",
+                                    style: TextStyle(color: Colors.white),
+                                  )))
+                        ],
+                      ),
+                    )),
+                Visibility(
+                    visible: _visible,
+                    child: Container(
+                      child: Column(
+                        children: <Widget>[
+                          Card(
+                            color: Colors.grey[200],
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
                                 children: <Widget>[
-                                  Text(
-                                    "Type",
-                                    style: TextStyle(color: Colors.black),
+                                  Column(
+                                    children: <Widget>[
+                                      Container(
+                                          width: 50,
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Text(
+                                                    "Type",
+                                                    style: TextStyle(
+                                                        color: Colors.black),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                                width: 5,
+                                              ),
+                                  Column(
+                                    children: <Widget>[
+                                      FlatButton(
+                                                  onPressed: () =>
+                                                      _sortItem("All"),
+                                                  color: Colors.blue[700],
+                                                  padding: EdgeInsets.all(10.0),
+                                                  child: Column(
+                                                    children: <Widget>[
+                                                      Icon(
+                                                        MdiIcons.update,
+                                                        color: Colors.black,
+                                                      ),
+                                                      Text(
+                                                        "All",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.black),
+                                                      ),
+                                                    ],
+                                                  )),
+                                    ],
                                   ),
                                   SizedBox(
                                     width: 5,
                                   ),
-                                  FlatButton(
-                                      onPressed: () => _sortItem("All"),
-                                      color: Colors.amber[900],
-                                      padding: EdgeInsets.all(10.0),
-                                      child: Column(
-                                        children: <Widget>[
-                                          Icon(
-                                            MdiIcons.update,
-                                            color: Colors.white,
-                                          ),
-                                          Text(
-                                            "All",
-                                            style: TextStyle(
-                                                color: Colors.white),
-                                          ),
-                                        ],
-                                      )),
-                                ],
-                              )),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[],
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Column(
-                        children: <Widget>[
-                          FlatButton(
-                              onPressed: () => _sortItem("Clothes"),
-                              color: Colors.amber[900],
-                              padding: EdgeInsets.all(10.0),
-                              child: Column(
-                                // Replace with a Row for horizontal icon + text
-                                children: <Widget>[
-                                  Image.asset(
-                                    'assets/images/ray-ban.png',
-                                    width: 50,
-                                    height: 25,
+                                  Column(
+                                    children: <Widget>[
+                                      FlatButton(
+                                          onPressed: () => _sortItem("Clothes"),
+                                          color: Colors.blue[700],
+                                          padding: EdgeInsets.all(10.0),
+                                          child: Column(
+                                            // Replace with a Row for horizontal icon + text
+                                            children: <Widget>[
+                                              Image.asset(
+                                                'assets/images/clothes.png',
+                                                width: 50,
+                                                height: 25,
+                                              ),
+                                              Text(
+                                                "Clothes",
+                                                style: TextStyle(
+                                                    color: Colors.black),
+                                              ),
+                                            ],
+                                          )),
+                                    ],
                                   ),
-                                  Text(
-                                    "Clothes",
-                                    style:
-                                        TextStyle(color: Colors.white),
+                                  SizedBox(
+                                    width: 5,
                                   ),
-                                ],
-                              )),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Column(
-                        children: <Widget>[
-                          FlatButton(
-                              onPressed: () => _sortItem("Pants"),
-                              color: Colors.amber[900],
-                              padding: EdgeInsets.all(10.0),
-                              child: Column(
-                                // Replace with a Row for horizontal icon + text
-                                children: <Widget>[
-                                  Image.asset(
-                                    'assets/images/quay_australia.jpg',
-                                    width: 120,
-                                    height: 25,
+                                  Column(
+                                    children: <Widget>[
+                                      FlatButton(
+                                          onPressed: () => _sortItem("Pants"),
+                                          color: Colors.blue[700],
+                                          padding: EdgeInsets.all(10.0),
+                                          child: Column(
+                                            // Replace with a Row for horizontal icon + text
+                                            children: <Widget>[
+                                              Image.asset(
+                                                'assets/images/pants.png',
+                                                width: 50,
+                                                height: 25,
+                                              ),
+                                              Text(
+                                                "Pants",
+                                                style: TextStyle(
+                                                    color: Colors.black),
+                                              ),
+                                            ],
+                                          )),
+                                    ],
                                   ),
-                                  Text(
-                                    "Pants",
-                                    style:
-                                        TextStyle(color: Colors.white),
+                                  SizedBox(
+                                    width: 5,
                                   ),
-                                ],
-                              )),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Column(
-                        children: <Widget>[
-                          FlatButton(
-                              onPressed: () => _sortItem("Dress"),
-                              color: Colors.amber[900],
-                              padding: EdgeInsets.all(10.0),
-                              child: Column(
-                                // Replace with a Row for horizontal icon + text
-                                children: <Widget>[
-                                  Image.asset(
-                                    'assets/images/blanc&eclare.jpg',
-                                    width: 100,
-                                    height: 25,
+                                  Column(
+                                    children: <Widget>[
+                                      FlatButton(
+                                          onPressed: () => _sortItem("Dress"),
+                                          color: Colors.blue[700],
+                                          padding: EdgeInsets.all(10.0),
+                                          child: Column(
+                                            // Replace with a Row for horizontal icon + text
+                                            children: <Widget>[
+                                              Image.asset(
+                                                'assets/images/dress.png',
+                                                width: 50,
+                                                height: 25,
+                                              ),
+                                              Text(
+                                                "Dress",
+                                                style: TextStyle(
+                                                    color: Colors.black),
+                                              ),
+                                            ],
+                                          )),
+                                    ],
                                   ),
-                                  Text(
-                                    "Dress",
-                                    style:
-                                        TextStyle(color: Colors.white),
+                                  SizedBox(
+                                    width: 5,
                                   ),
-                                ],
-                              )),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Column(
-                        children: <Widget>[
-                          FlatButton(
-                              onPressed: () => _sortItem("Other"),
-                              color: Colors.amber[900],
-                              padding: EdgeInsets.all(10.0),
-                              child: Column(
-                                // Replace with a Row for horizontal icon + text
-                                children: <Widget>[
-                                  Icon(
-                                    MdiIcons.more,
-                                    color: Colors.white,
-                                  ),
-                                  Text(
-                                    "Others",
-                                    style:
-                                        TextStyle(color: Colors.white),
+                                  Column(
+                                    children: <Widget>[
+                                      FlatButton(
+                                          onPressed: () => _sortItem("Other"),
+                                          color: Colors.blue[700],
+                                          padding: EdgeInsets.all(10.0),
+                                          child: Column(
+                                            // Replace with a Row for horizontal icon + text
+                                            children: <Widget>[
+                                              Icon(
+                                                MdiIcons.more,
+                                                color: Colors.black,
+                                              ),
+                                              Text(
+                                                "Others",
+                                                style: TextStyle(
+                                                    color: Colors.black),
+                                              ),
+                                            ],
+                                          )),
+                                    ],
                                   ),
                                 ],
-                              )),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        )),
+                    )),
                 Container(
                   //width: 50,
                   height: 30,
+                  //color: Colors.blue[100],
                   child: Center(
                     child: Text(curr,
                         style: TextStyle(
@@ -285,7 +295,7 @@ class _MainScreenState extends State<MainScreen> {
                         child: GridView.count(
                             crossAxisCount: 1,
                             childAspectRatio:
-                                (screenWidth / screenHeight) / 0.4,
+                                (screenWidth / screenHeight) / 0.5,
                             children:
                                 List.generate(productdata.length, (index) {
                               return Card(
@@ -299,28 +309,32 @@ class _MainScreenState extends State<MainScreen> {
                                     child: Row(
                                       children: <Widget>[
                                         Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.start,  
-                                          children: <Widget>[
-                                          GestureDetector(
-                                            onTap: () => _onImageDisplay(index),
-                                            child: Container(
-                                                height: screenWidth / 1.8,
-                                                width: screenWidth / 2.5,
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25),
-                                                    shape: BoxShape.rectangle,
-                                                    border: Border.all(
-                                                        color:
-                                                            Colors.yellowAccent),
-                                                    image: DecorationImage(
-                                                        fit: BoxFit.fill,
-                                                        image: NetworkImage(
-                                                            "http://yjjmappflutter.com/Unique/productimages/${productdata[index]['code']}.jpg")))),
-                                          ),
-                                        ]),
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              GestureDetector(
+                                                onTap: () =>
+                                                    _onImageDisplay(index),
+                                                child: Container(
+                                                    height: screenWidth / 1.8,
+                                                    width: screenWidth / 2.5,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25),
+                                                        shape:
+                                                            BoxShape.rectangle,
+                                                        border: Border.all(
+                                                            color: Colors
+                                                                .lightBlue),
+                                                        image: DecorationImage(
+                                                            fit: BoxFit.fill,
+                                                            image: NetworkImage(
+                                                                "http://yjjmappflutter.com/Unique/productimages/${productdata[index]['code']}.jpg")))),
+                                              ),
+                                            ]),
                                         Column(
                                           children: <Widget>[
                                             Container(
@@ -331,8 +345,10 @@ class _MainScreenState extends State<MainScreen> {
                                         Container(
                                           width: screenWidth / 2.5,
                                           child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: <Widget>[
                                               Text(
                                                 productdata[index]['name'],
@@ -376,7 +392,7 @@ class _MainScreenState extends State<MainScreen> {
                                                   //fontWeight: FontWeight.bold
                                                 ),
                                               ),
-                                              /*SizedBox(
+                                              SizedBox(
                                                 height: 5,
                                               ),
                                               Text(
@@ -386,13 +402,14 @@ class _MainScreenState extends State<MainScreen> {
                                                   fontSize: 16,
                                                   //fontWeight: FontWeight.bold
                                                 ),
-                                              ),*/
+                                              ),
                                               SizedBox(
                                                 height: 5,
                                               ),
                                               Text(
                                                 "Quantity: " +
-                                                    productdata[index]['quantity'],
+                                                    productdata[index]
+                                                        ['quantity'],
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   //fontWeight: FontWeight.bold
@@ -404,8 +421,7 @@ class _MainScreenState extends State<MainScreen> {
                                               Text(
                                                 "Price: RM " +
                                                     productdata[index]['price'],
-                                                style: TextStyle(
-                                                    fontSize: 16),
+                                                style: TextStyle(fontSize: 16),
                                               ),
                                               SizedBox(
                                                 height: 25,
@@ -424,15 +440,16 @@ class _MainScreenState extends State<MainScreen> {
                                                     ),
                                                     Text(
                                                       " Add to cart",
-                                                      style:
-                                                          TextStyle(fontSize: 16),
+                                                      style: TextStyle(
+                                                          fontSize: 16),
                                                     ),
                                                   ],
                                                 ),
-                                                color: Colors.yellow[700],
+                                                color: Colors.blue[900],
                                                 textColor: Colors.white,
                                                 elevation: 5,
-                                                onPressed: () =>_addCart(index),
+                                                onPressed: () =>
+                                                    _addCart(index),
                                               ),
                                             ],
                                           ),
@@ -453,21 +470,21 @@ class _MainScreenState extends State<MainScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
             content: new Container(
-          height: screenWidth / 2,
+          height: screenWidth / 1.2,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                  height: screenWidth / 2,
+                  height: screenWidth / 1.2,
                   width: screenWidth / 1.5,
                   decoration: BoxDecoration(
-                      border: Border.all(color: Colors.yellow),
+                      border: Border.all(color: Colors.lightBlue),
                       borderRadius: BorderRadius.circular(25),
                       image: DecorationImage(
                           fit: BoxFit.fill,
                           image: NetworkImage(
-                              "http://yjjmappflutter.com/Unique/images/${productdata[index]['code']}.jpg")))),
+                              "http://yjjmappflutter.com/Unique/productimages/${productdata[index]['code']}.jpg")))),
             ],
           ),
         ));
@@ -493,7 +510,7 @@ class _MainScreenState extends State<MainScreen> {
           type: ProgressDialogType.Normal, isDismissible: false);
       pr.style(message: "Searching...");
       pr.show();
-      String urlLoadJobs = server +"/php/loadProducts.php";
+      String urlLoadJobs = server + "/php/loadProducts.php";
       http.post(urlLoadJobs, body: {
         "type": type,
       }).then((res) {
@@ -502,13 +519,13 @@ class _MainScreenState extends State<MainScreen> {
           var extractdata = json.decode(res.body);
           productdata = extractdata["products"];
           FocusScope.of(context).requestFocus(new FocusNode());
-          //pr.dismiss();
+        //  pr.dismiss();
         });
       }).catchError((err) {
         print(err);
        // pr.dismiss();
       });
-      //pr.dismiss();
+     // pr.dismiss();
     } catch (e) {
       Toast.show("Error", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
@@ -532,7 +549,7 @@ class _MainScreenState extends State<MainScreen> {
             if (res.body == "nodata") {
               Toast.show("Product not found", context,
                   duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-             // pr.dismiss();
+              //pr.dismiss();
               FocusScope.of(context).requestFocus(new FocusNode());
               return;
             }
@@ -547,7 +564,7 @@ class _MainScreenState extends State<MainScreen> {
           .catchError((err) {
            // pr.dismiss();
           });
-     // pr.dismiss();
+    //  pr.dismiss();
     } catch (e) {
       Toast.show("Error", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
@@ -560,7 +577,7 @@ class _MainScreenState extends State<MainScreen> {
           builder: (context) => new AlertDialog(
             title: new Text('Are you sure?',
                 style: TextStyle(
-                  color: Colors.yellow[900],
+                  color: Colors.blue[900],
                 )),
             content: new Text('Do you want to exit an App?'),
             actions: <Widget>[
@@ -570,7 +587,7 @@ class _MainScreenState extends State<MainScreen> {
                   },
                   child: Text("Exit",
                       style: TextStyle(
-                        color: Colors.red,
+                        color: Colors.blue,
                       ))),
               MaterialButton(
                   onPressed: () {
@@ -578,7 +595,7 @@ class _MainScreenState extends State<MainScreen> {
                   },
                   child: Text("Cancel",
                       style: TextStyle(
-                        color: Colors.red,
+                        color: Colors.blue,
                       ))),
             ],
           ),
@@ -595,7 +612,7 @@ class _MainScreenState extends State<MainScreen> {
               return AlertDialog(
                 title: new Text("Add to Cart?",
                     style: TextStyle(
-                      color: Colors.red,
+                      color: Colors.blue[900],
                     )),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -620,7 +637,7 @@ class _MainScreenState extends State<MainScreen> {
                                   }
                                 })
                               },
-                              child: Icon(MdiIcons.minus, color: Colors.yellow),
+                              child: Icon(MdiIcons.minus, color: Colors.blue),
                             ),
                             Text(
                               quantity.toString(),
@@ -632,8 +649,8 @@ class _MainScreenState extends State<MainScreen> {
                               onPressed: () => {
                                 newSetState(() {
                                   if (quantity <
-                                      (int.parse(productdata[index]['quantity']) -
-                                          8)) {
+                                      (int.parse(
+                                          productdata[index]['quantity']))) {
                                     quantity++;
                                   } else {
                                     Toast.show(
@@ -645,7 +662,7 @@ class _MainScreenState extends State<MainScreen> {
                               },
                               child: Icon(
                                 MdiIcons.plus,
-                                color: Colors.yellow,
+                                color: Colors.blue,
                               ),
                             ),
                           ],
@@ -663,7 +680,7 @@ class _MainScreenState extends State<MainScreen> {
                       child: Text(
                         "Yes",
                         style: TextStyle(
-                          color: Colors.yellow,
+                          color: Colors.blue,
                         ),
                       )),
                   MaterialButton(
@@ -673,7 +690,7 @@ class _MainScreenState extends State<MainScreen> {
                       child: Text(
                         "Cancel",
                         style: TextStyle(
-                          color: Colors.yellow,
+                          color: Colors.blue,
                         ),
                       )),
                 ],
@@ -688,6 +705,7 @@ class _MainScreenState extends State<MainScreen> {
       int cquantity = int.parse(productdata[index]["quantity"]);
       print(cquantity);
       print(productdata[index]["code"]);
+      print(productdata[index]["size"]);
       print(widget.user.email);
       if (cquantity > 0) {
         ProgressDialog pr = new ProgressDialog(context,
@@ -698,13 +716,14 @@ class _MainScreenState extends State<MainScreen> {
         http.post(urlLoadJobs, body: {
           "email": widget.user.email,
           "procode": productdata[index]["code"],
+          "size": productdata[index]["size"],
           "quantity": quantity.toString(),
         }).then((res) {
           print(res.body);
           if (res.body == "failed") {
             Toast.show("Failed add to cart", context,
                 duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-           // pr.dismiss();
+         //   pr.dismiss();
             return;
           } else {
             List respond = res.body.split(",");
@@ -714,12 +733,12 @@ class _MainScreenState extends State<MainScreen> {
             Toast.show("Success add to cart", context,
                 duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
           }
-        //  pr.dismiss();
+     //     pr.dismiss();
         }).catchError((err) {
           print(err);
-         // pr.dismiss();
+        //  pr.dismiss();
         });
-       // pr.dismiss();
+      //  pr.dismiss();
       } else {
         Toast.show("Out of stock", context,
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);

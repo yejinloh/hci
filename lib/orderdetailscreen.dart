@@ -29,10 +29,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.yellow[100],
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: Text('Order Details'),
-        backgroundColor: Colors.yellow[800],
+        backgroundColor: Colors.blue[800],
       ),
       body: Center(
         child: Column(children: <Widget>[
@@ -90,7 +90,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                                             CachedNetworkImage(
                                                       fit: BoxFit.scaleDown,
                                                       imageUrl:
-                                                          "https://yjjmappflutter.com/Unique/productimages/${_orderdetails[index]['code']}.PNG",
+                                                          "https://yjjmappflutter.com/Unique/productimages/${_orderdetails[index]['code']}.jpg",
                                                       placeholder: (context,
                                                               url) =>
                                                           new CircularProgressIndicator(),
@@ -115,7 +115,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                               Text(
                                                 _orderdetails[index]['name'],
                                                 style: TextStyle(
-                                                    color: Colors.yellow[900],
+                                                    color: Colors.blue[900],
                                                     fontSize: 15,
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -155,21 +155,21 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       }))
         ]),
       ),
-      // bottomNavigationBar: new Container(
-      //     height: screenHeight / 12,
-      //     child: Card(
-      //       color: Colors.yellow[200],
-      //       child: Column(
-      //         children: <Widget>[
-      //           Text("Total:",
-      //               style: TextStyle(
-      //                   color: Colors.black, fontWeight: FontWeight.bold,fontSize: 18)),
-      //           Text("RM" + widget.order.total,
-      //               style: TextStyle(
-      //                   color: Colors.black, fontWeight: FontWeight.bold,fontSize: 20)),
-      //         ],
-      //       ),
-      //     )),
+      bottomNavigationBar: new Container(
+          height: screenHeight / 12,
+          child: Card(
+            color: Colors.blue[200],
+            child: Column(
+              children: <Widget>[
+                Text("Total:",
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold,fontSize: 18)),
+                Text("RM" + widget.order.total,
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold,fontSize: 20)),
+              ],
+            ),
+          )),
     );
   }
 

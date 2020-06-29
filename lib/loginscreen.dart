@@ -22,6 +22,8 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _emailLoginController = new TextEditingController();
   TextEditingController _passwordLoginController = new TextEditingController();
   String urlLogin = "http://yjjmappflutter.com/Unique/php/loginUser.php";
+  var _formKey = new GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -35,14 +37,12 @@ class _LoginScreenState extends State<LoginScreen> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-          backgroundColor: Colors.grey[300],
+          backgroundColor: Colors.blueGrey[300],
           resizeToAvoidBottomPadding: false,
           body: Stack(
             children: <Widget>[
               firstHalf(context),
               secondHalf(context),
-              thirdHalf(context),
-              titleName(),
             ],
           )),
     );
@@ -61,203 +61,153 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget secondHalf(BuildContext context) {
     return Container(
-      height: 550,
-      margin: EdgeInsets.only(top: screenHeight / 2.5),
-      padding: EdgeInsets.only(left: 10, right: 10),
-      child: Column(
-        children: <Widget>[
-          Card(
-            elevation: 10,
-            //color: Colors.grey[300],
-            child: Container(
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 20),
-              child: Column(
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "User Login",
-                      style: TextStyle(
-                        color: Colors.yellowAccent[700],
-                        fontSize: 26,
-                        fontWeight: FontWeight.w900,
-                        fontFamily: "Roboto",
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                      controller: _emailLoginController,
-                      keyboardType: TextInputType.text,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.yellow[900],
-                          fontWeight: FontWeight.w800,
-                          fontFamily: "Roboto"),
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        prefixIcon: Icon(Icons.email),
-                        contentPadding: EdgeInsets.all(10.0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                          borderSide: BorderSide(
-                              color: Colors.black,
-                              width: 3.0,
-                              style: BorderStyle.solid),
-                        ),
-                      )),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: _passwordLoginController,
-                    keyboardType: TextInputType.text,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.yellow[900],
-                        fontWeight: FontWeight.w800,
-                        fontFamily: "Roboto"),
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      prefixIcon: Icon(Icons.lock),
-                      contentPadding: EdgeInsets.all(10.0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide(
-                            color: Colors.black,
-                            width: 3.0,
-                            style: BorderStyle.solid),
-                      ),
-                    ),
-                    obscureText: true,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+        height: 550,
+        margin: EdgeInsets.only(top: screenHeight / 2.4),
+        padding: EdgeInsets.only(left: 10, right: 10),
+        child: new Form(
+          key: _formKey,
+          autovalidate: true,
+          child: Column(
+            children: <Widget>[
+              Card(
+                elevation: 10,
+                color: Colors.grey[100],
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(20, 10, 20, 20),
+                  child: Column(
                     children: <Widget>[
-                      Checkbox(
-                        value: rememberMe,
-                        onChanged: (bool value) {
-                          _onRememberMe(value);
-                        },
-                      ),
-                      Text('Remember Me',
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "User Login",
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
+                            color: Colors.blue[700],
+                            fontSize: 26,
+                            fontWeight: FontWeight.w900,
+                            fontFamily: "Roboto",
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                          controller: _emailLoginController,
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (value) => isValidEmail(value)
+                              ? null
+                              : 'Please enter a valid email address',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.blue,
+                              fontWeight: FontWeight.w800,
+                              fontFamily: "Roboto"),
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            prefixIcon: Icon(Icons.email),
+                            contentPadding: EdgeInsets.all(10.0),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                              borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 3.0,
+                                  style: BorderStyle.solid),
+                            ),
+                          )),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        controller: _passwordLoginController,
+                        keyboardType: TextInputType.visiblePassword,
+                        inputFormatters: [
+                          new LengthLimitingTextInputFormatter(30)
+                        ],
+                        validator: (val) =>
+                            val.isEmpty ? 'Password is required' : null,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.blue,
+                            fontWeight: FontWeight.w800,
+                            fontFamily: "Roboto"),
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          prefixIcon: Icon(Icons.lock),
+                          contentPadding: EdgeInsets.all(10.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                            borderSide: BorderSide(
+                                color: Colors.black,
+                                width: 3.0,
+                                style: BorderStyle.solid),
+                          ),
+                        ),
+                        obscureText: true,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Checkbox(
+                            value: rememberMe,
+                            onChanged: (bool value) {
+                              _onRememberMe(value);
+                            },
+                          ),
+                          Text('Remember Me',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          MaterialButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0)),
+                            minWidth: 125,
+                            height: 50,
+                            child: Text(
+                              'Login',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            color: Colors.blue[900],
+                            textColor: Colors.white,
+                            elevation: 10,
+                            onPressed: _userLogin,
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      MaterialButton(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-        minWidth: 125,
-        height: 50,
-        child: Text(
-          'Login',
-          style: TextStyle(fontSize: 18),
-        ),
-        color: Colors.red[900],
-        textColor: Colors.white,
-        elevation: 10,
-        onPressed: _userLogin,
-      ),
-                    ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("Don't have an account? ",
+                      style: TextStyle(
+                          fontSize: 16.0, fontWeight: FontWeight.w600)),
+                  GestureDetector(
+                    onTap: _registerUser,
+                    child: Text(
+                      "Register",
+                      style: TextStyle(
+                          fontSize: 16.0, fontWeight: FontWeight.w900),
+                    ),
                   ),
                 ],
               ),
-            ),
-          ),
-          SizedBox(
-            height: 45,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text("Don't have an account? ",
-                  style:
-                      TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600)),
-              GestureDetector(
-                onTap: _registerUser,
-                child: Text(
-                  "Register",
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w900),
-                ),
-              ),
             ],
           ),
-          // SizedBox(
-          //   height: 10,
-          // ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: <Widget>[
-          //     Text("Forgot your password? ",
-          //         style:
-          //             TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600)),
-          //     GestureDetector(
-          //       onTap: _forgotPassword,
-          //       child: Text(
-          //         "Reset Password",
-          //         style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w900),
-          //       ),
-          //     ),
-          //   ],
-          // )
-        ],
-      ),
-    );
-  }
-
-  Widget thirdHalf(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(145, 500, 50, 130),
-      child: MaterialButton(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-        minWidth: 125,
-        height: 50,
-        child: Text(
-          'Login',
-          style: TextStyle(fontSize: 18),
-        ),
-        color: Colors.red[900],
-        textColor: Colors.white,
-        elevation: 10,
-        onPressed: _userLogin,
-      ),
-    );
-  }
-
-  Widget titleName() {
-    return Container(
-      margin: EdgeInsets.only(top: 50),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(
-            Icons.shop,
-            size: 40,
-            color: Colors.indigo[900],
-          ),
-          Text(
-            " Unique",
-            style: TextStyle(
-                fontSize: 36,
-                color: Colors.indigo[900],
-                fontWeight: FontWeight.w900),
-          )
-        ],
-      ),
-    );
+        ));
   }
 
   void _userLogin() async {
@@ -279,15 +229,14 @@ class _LoginScreenState extends State<LoginScreen> {
         List userdata = string.split(",");
         if (userdata[0] == "success") {
           User _user = new User(
-            name: userdata[1],
-            email: _email,
-            password: _password,
-            phone: userdata[3],
-            credit: userdata[4],
-            // datereg: userdata[5],
-            // quantity: userdata[6]
-          );
-          //pr.dismiss();
+              name: userdata[1],
+              email: _email,
+              password: _password,
+              phone: userdata[3],
+              credit: userdata[4],
+              datereg: userdata[5],
+              quantity: userdata[6]);
+          pr.hide();
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -295,13 +244,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         user: _user,
                       )));
         } else {
-          //pr.dismiss();
+          pr.hide();
           Toast.show("Login failed", context,
               duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
         }
       }).catchError((err) {
         print(err);
-        //pr.dismiss();
+        pr.hide();
       });
     } on Exception catch (_) {
       Toast.show("Error", context,
@@ -314,52 +263,6 @@ class _LoginScreenState extends State<LoginScreen> {
         MaterialPageRoute(builder: (BuildContext context) => RegisterScreen()));
   }
 
-  // void _forgotPassword() {
-  //   TextEditingController phoneController = TextEditingController();
-  //   // flutter defined function
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       // return object of type Dialog
-  //       return AlertDialog(
-  //         title: new Text("Forgot Password?"),
-  //         content: new Container(
-  //           height: 100,
-  //           child: Column(
-  //             children: <Widget>[
-  //               Text(
-  //                 "Enter your recovery email",
-  //               ),
-  //               TextField(
-  //                   decoration: InputDecoration(
-  //                 labelText: 'Email',
-  //                 icon: Icon(Icons.email),
-  //               ))
-  //             ],
-  //           ),
-  //         ),
-  //         actions: <Widget>[
-  //           // usually buttons at the bottom of the dialog
-  //           new FlatButton(
-  //             child: new Text("Yes"),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //               print(
-  //                 _emailLoginController.text,
-  //               );
-  //             },
-  //           ),
-  //           new FlatButton(
-  //             child: new Text("No"),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
   void _onRememberMe(bool newValue) => setState(() {
         rememberMe = newValue;
         print(rememberMe);
@@ -427,5 +330,17 @@ class _LoginScreenState extends State<LoginScreen> {
       Toast.show("Preferences have removed", context,
           duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
     }
+  }
+
+  bool isValidEmail(String input) {
+    final RegExp regex = new RegExp(
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+    return regex.hasMatch(input);
+  }
+
+  bool isValidPassword(String input) {
+    final RegExp regex = new RegExp(
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+    return regex.hasMatch(input);
   }
 }

@@ -29,11 +29,6 @@ class _MyAppState extends State<MyApp> {
                     image: DecorationImage(
                         image: AssetImage('assets/images/splash.jpg'),
                         fit: BoxFit.cover))),
-            Container(
-              height: 350,
-              width: 420,
-              child: Text("Unique"),
-            ),
             Container(height: 500, child: ProgressIndicator())
           ],
         ),

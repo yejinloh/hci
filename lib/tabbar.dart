@@ -11,7 +11,7 @@ void main() => runApp(TabBarPage());
 class TabBarPage extends StatefulWidget {
   final User user;
 
-  const TabBarPage({Key key,this.user}) : super(key: key);
+  const TabBarPage({Key key, this.user}) : super(key: key);
   _TabBarState createState() => _TabBarState();
 }
 
@@ -27,11 +27,9 @@ class _TabBarState extends State<TabBarPage> {
       MainScreen(user: widget.user),
       CartScreen(user: widget.user),
       PaymentHistoryScreen(user: widget.user),
-      ProfileScreen(user: widget.user), 
+      ProfileScreen(user: widget.user),
     ];
   }
-
-  //String $pagetitle = "My Helper";
 
   onTapped(int index) {
     setState(() {
@@ -50,24 +48,29 @@ class _TabBarState extends State<TabBarPage> {
         onTap: onTapped,
         currentIndex: currentTabIndex,
         type: BottomNavigationBarType.fixed,
-
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             title: Text("Products"),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart, ),
+            icon: Icon(
+              Icons.shopping_cart,
+            ),
             title: Text("Cart"),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.payment, ),
+            icon: Icon(
+              Icons.payment,
+            ),
             title: Text("History"),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person, ),
+            icon: Icon(
+              Icons.person,
+            ),
             title: Text("Profile"),
-           )
+          )
         ],
       ),
     );

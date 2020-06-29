@@ -21,10 +21,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return WillPopScope(
         onWillPop: _onBackPressAppBar,
         child: Scaffold(
-            backgroundColor: Colors.blueGrey[100],
+            backgroundColor: Colors.grey[200],
             appBar: AppBar(
               title: Text('PAYMENT'),
-              backgroundColor: Colors.blue[900],
+              backgroundColor: Colors.blue[800],
             ),
             body: Column(
               children: <Widget>[

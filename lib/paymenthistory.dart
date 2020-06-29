@@ -39,10 +39,10 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
     return WillPopScope(
         onWillPop: _onBackPressed,
         child: Scaffold(
-          backgroundColor: Colors.yellow[100],
+          backgroundColor: Colors.grey[200],
           appBar: AppBar(
             title: Text('Payment History'),
-            backgroundColor: Colors.yellow[800],
+            backgroundColor: Colors.blue[800],
           ),
           body: Center(
             child: Column(children: <Widget>[
@@ -169,7 +169,7 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
           builder: (context) => new AlertDialog(
             title: new Text('Are you sure?',
                 style: TextStyle(
-                  color: Colors.yellow[900],
+                  color: Colors.blue[900],
                 )),
             content: new Text('Do you want to exit an App'),
             actions: <Widget>[
@@ -179,7 +179,7 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
                   },
                   child: Text("Exit",
                       style: TextStyle(
-                        color: Colors.yellow,
+                        color: Colors.blue,
                       ))),
               MaterialButton(
                   onPressed: () {
@@ -187,7 +187,7 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
                   },
                   child: Text("Cancel",
                       style: TextStyle(
-                        color: Colors.yellow,
+                        color: Colors.blue,
                       ))),
             ],
           ),
@@ -205,8 +205,8 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
       //pr.dismiss();
       if (res.body == "nodata") {
         setState(() {
-        paymentdata = null;
-        titlecenter = "No Payment History";
+          paymentdata = null;
+          titlecenter = "No Payment History";
         });
       } else {
         setState(() {
